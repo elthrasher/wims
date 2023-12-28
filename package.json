@@ -11,6 +11,7 @@
     "watch": "cdk watch --hotswap-fallback"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
     "@types/jest": "^29.5.11",
     "@types/node": "20.10.4",
     "aws-cdk": "2.116.1",

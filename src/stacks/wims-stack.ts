@@ -1,26 +1,34 @@
-import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { Arn, CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import {
   AwsIntegration,
   MockIntegration,
   PassthroughBehavior,
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
-import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
+import {
+  AttributeType,
+  StreamViewType,
+  TableV2,
+} from 'aws-cdk-lib/aws-dynamodb';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 import {
   DefinitionBody,
   JsonPath,
+  Parallel,
   StateMachine,
   TaskInput,
 } from 'aws-cdk-lib/aws-stepfunctions';
 import {
-  CallApiGatewayRestApiEndpoint,
   DynamoAttributeValue,
   DynamoUpdateItem,
-  HttpMethod,
+  SqsSendMessage,
 } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import {
   AwsCustomResource,
@@ -60,24 +68,41 @@ export class WimsStack extends Stack {
       { methodResponses: [{ statusCode: '200' }] }
     );
 
-    const table = new TableV2(this, 'WIMSTable', {
-      partitionKey: { name: TABLE_PK, type: AttributeType.STRING },
-      removalPolicy: RemovalPolicy.DESTROY,
-      sortKey: { name: TABLE_SK, type: AttributeType.STRING },
-      tableName: 'WIMS',
-    });
-
     const throttlePlan = paymentsApi.addUsagePlan('ThrottlePlan', {
       name: 'Throttle',
       throttle: { rateLimit: 5, burstLimit: 1 },
     });
     const key = paymentsApi.addApiKey('ThrottleKey');
     throttlePlan.addApiKey(key);
+    const paymentsQueue = new Queue(this, 'PaymentsQueue', {
+      queueName: 'payments-queue',
+    });
+
+    const table = new TableV2(this, 'WIMSTable', {
+      dynamoStream: StreamViewType.NEW_IMAGE,
+      partitionKey: { name: 'pk', type: AttributeType.STRING },
+      removalPolicy: RemovalPolicy.DESTROY,
+      sortKey: { name: 'sk', type: AttributeType.STRING },
+      tableName: 'WIMS',
+    });
+
+    const cdcEnrichmentFn = new NodejsFunction(this, 'CDCEnrichment', {
+      entry: './src/fns/cdc-enrichment.ts',
+      functionName: 'cdc-enrichment',
+      logRetention: RetentionDays.ONE_WEEK,
+      runtime: Runtime.NODEJS_20_X,
+    });
+
+    const parallel = new Parallel(this, 'Parallel Steps');
+
     const adjustInventory = new DynamoUpdateItem(this, 'AdjustInventory', {
       expressionAttributeNames: { '#quantity': 'quantity' },
       expressionAttributeValues: {
         ':quantity': DynamoAttributeValue.numberFromString(
-          JsonPath.stringAt('$.detail.quantity')
+          JsonPath.format(
+            '{}',
+            JsonPath.stringAt('$.detail.dynamodb.NewImage.quantity')
+          )
         ),
       },
       conditionExpression: '#quantity >= :quantity',
@@ -90,34 +115,44 @@ export class WimsStack extends Stack {
       updateExpression: 'set #quantity = #quantity - :quantity',
     });
 
-    const callPaymentsApi = new CallApiGatewayRestApiEndpoint(
-      this,
-      'CallPaymentsApi',
-      {
-        api: paymentsApi,
-        apiPath: '/payments',
-        method: HttpMethod.POST,
-        requestBody: TaskInput.fromJsonPathAt('$.detail'),
-        stageName: 'prod',
-      }
-    );
+    const enqueuePayment = new SqsSendMessage(this, 'EnqueuePayment', {
+      messageBody: TaskInput.fromJsonPathAt('$.detail.dynamodb.NewImage'),
+      queue: paymentsQueue,
+    });
+
+    parallel.branch(adjustInventory);
+    parallel.branch(enqueuePayment);
 
     const sm = new StateMachine(this, 'OrdersStateMachine', {
-      definitionBody: DefinitionBody.fromChainable(
-        adjustInventory.next(callPaymentsApi)
-      ),
+      definitionBody: DefinitionBody.fromChainable(parallel),
       stateMachineName: 'orders-state-machine',
       tracingEnabled: true,
     });
 
     const bus = EventBus.fromEventBusName(this, 'DefaultBus', 'default');
 
-    const pipeRole = new Role(this, 'PipeRole', {
+    const streamPipeRole = new Role(this, 'StreamPipeRole', {
       assumedBy: new ServicePrincipal('pipes.amazonaws.com'),
     });
 
-    bus.grantPutEventsTo(pipeRole);
-    table.grantStreamRead(pipeRole);
+    const streamPipeLogs = new LogGroup(this, 'StreamPipeLogs', {
+      logGroupName: '/FreeCodeCamp/streamPipeLogs',
+      retention: RetentionDays.ONE_DAY,
+    });
+
+    const paymentsPipeRole = new Role(this, 'PaymentsPipeRole', {
+      assumedBy: new ServicePrincipal('pipes.amazonaws.com'),
+    });
+
+    const paymentsPipeLogs = new LogGroup(this, 'PaymentsPipeLogs', {
+      logGroupName: '/FreeCodeCamp/paymentsPipeLogs',
+      retention: RetentionDays.ONE_DAY,
+    });
+
+    bus.grantPutEventsTo(streamPipeRole);
+    cdcEnrichmentFn.grantInvoke(streamPipeRole);
+    table.grantStreamRead(streamPipeRole);
+    paymentsQueue.grantConsumeMessages(paymentsPipeRole);
 
     new Rule(this, 'OrderStateMachineRule', {
       eventBus: bus,
@@ -127,8 +162,16 @@ export class WimsStack extends Stack {
     });
 
     new CfnPipe(this, 'DDBStreamPipe', {
+      enrichment: cdcEnrichmentFn.functionArn,
+      logConfiguration: {
+        cloudwatchLogsLogDestination: {
+          logGroupArn: streamPipeLogs.logGroupArn,
+        },
+        includeExecutionData: ['ALL'],
+        level: 'INFO',
+      },
       name: 'DDBStreamPipe',
-      roleArn: pipeRole.roleArn,
+      roleArn: streamPipeRole.roleArn,
       source: table.tableStreamArn!,
       sourceParameters: {
         dynamoDbStreamParameters: { batchSize: 10, startingPosition: 'LATEST' },
@@ -137,12 +180,29 @@ export class WimsStack extends Stack {
         },
       },
       target: bus.eventBusArn,
+    });
+
+    new CfnPipe(this, 'PaymentsPipe', {
+      logConfiguration: {
+        cloudwatchLogsLogDestination: {
+          logGroupArn: paymentsPipeLogs.logGroupArn,
+        },
+        includeExecutionData: ['ALL'],
+        level: 'INFO',
+      },
+      name: 'PaymentsPipe',
+      roleArn: paymentsPipeRole.roleArn,
+      source: paymentsQueue.queueArn,
+      target: Arn.format(
+        {
+          service: 'execute-api',
+          resource: `${paymentsApi.restApiId}/prod/POST/payments`,
+        },
+        Stack.of(this)
+      ),
       targetParameters: {
         inputTemplate: `{
-          "customerId": <$.dynamodb.NewImage.customerId.S>, 
-          "quantity": <$.dynamodb.NewImage.quantity.N>, 
-          "status": <$.dynamodb.NewImage.status.S>,
-          "timestamp": <$.dynamodb.NewImage.timestamp.N> 
+          "body": <$.body>
         }`,
       },
     });
