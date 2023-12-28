@@ -165,7 +165,7 @@ export class WimsStack extends Stack {
         detailType: [cdcEvent],
         detail: {
           eventType: ['INSERT'],
-          pk: ['CUSTOMER#*'],
+          pk: [{ prefix: 'CUSTOMER#' }],
         },
       },
       ruleName: 'OrdersStateMachine',
