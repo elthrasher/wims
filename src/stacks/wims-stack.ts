@@ -6,9 +6,22 @@ import {
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
+import {
+  DefinitionBody,
+  JsonPath,
+  StateMachine,
+  TaskInput,
+} from 'aws-cdk-lib/aws-stepfunctions';
+import {
+  CallApiGatewayRestApiEndpoint,
+  DynamoAttributeValue,
+  DynamoUpdateItem,
+  HttpMethod,
+} from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import {
   AwsCustomResource,
   AwsCustomResourcePolicy,
@@ -58,6 +71,42 @@ export class WimsStack extends Stack {
     });
     const key = paymentsApi.addApiKey('ThrottleKey');
     throttlePlan.addApiKey(key);
+    const adjustInventory = new DynamoUpdateItem(this, 'AdjustInventory', {
+      expressionAttributeNames: { '#quantity': 'quantity' },
+      expressionAttributeValues: {
+        ':quantity': DynamoAttributeValue.numberFromString(
+          JsonPath.stringAt('$.detail.quantity')
+        ),
+      },
+      conditionExpression: '#quantity >= :quantity',
+      key: {
+        pk: DynamoAttributeValue.fromString('INVENTORY#MACGUFFIN'),
+        sk: DynamoAttributeValue.fromString('MODEL#LX'),
+      },
+      resultPath: JsonPath.DISCARD,
+      table,
+      updateExpression: 'set #quantity = #quantity - :quantity',
+    });
+
+    const callPaymentsApi = new CallApiGatewayRestApiEndpoint(
+      this,
+      'CallPaymentsApi',
+      {
+        api: paymentsApi,
+        apiPath: '/payments',
+        method: HttpMethod.POST,
+        requestBody: TaskInput.fromJsonPathAt('$.detail'),
+        stageName: 'prod',
+      }
+    );
+
+    const sm = new StateMachine(this, 'OrdersStateMachine', {
+      definitionBody: DefinitionBody.fromChainable(
+        adjustInventory.next(callPaymentsApi)
+      ),
+      stateMachineName: 'orders-state-machine',
+      tracingEnabled: true,
+    });
 
     const bus = EventBus.fromEventBusName(this, 'DefaultBus', 'default');
 
@@ -68,7 +117,15 @@ export class WimsStack extends Stack {
     bus.grantPutEventsTo(pipeRole);
     table.grantStreamRead(pipeRole);
 
+    new Rule(this, 'OrderStateMachineRule', {
+      eventBus: bus,
+      eventPattern: { source: ['Pipe DDBStreamPipe'] },
+      ruleName: 'OrdersStateMachine',
+      targets: [new SfnStateMachine(sm)],
+    });
+
     new CfnPipe(this, 'DDBStreamPipe', {
+      name: 'DDBStreamPipe',
       roleArn: pipeRole.roleArn,
       source: table.tableStreamArn!,
       sourceParameters: {
@@ -78,6 +135,14 @@ export class WimsStack extends Stack {
         },
       },
       target: bus.eventBusArn,
+      targetParameters: {
+        inputTemplate: `{
+          "customerId": <$.dynamodb.NewImage.customerId.S>, 
+          "quantity": <$.dynamodb.NewImage.quantity.N>, 
+          "status": <$.dynamodb.NewImage.status.S>,
+          "timestamp": <$.dynamodb.NewImage.timestamp.N> 
+        }`,
+      },
     });
 
     const ordersApi = new RestApi(this, 'WIMSOrders', {
@@ -154,16 +219,22 @@ export class WimsStack extends Stack {
             'application/json': JSON.stringify({
               Item: {
                 pk: {
-                  S: "$input.path('$.customerId')",
+                  S: "CUSTOMER#$input.path('$.customerId')",
                 },
                 sk: {
-                  S: '$context.requestTimeEpoch',
+                  S: 'TIMESTAMP#$context.requestTimeEpoch',
                 },
                 customerId: {
                   S: "$input.path('$.customerId')",
                 },
                 quantity: {
                   N: "$input.path('$.quantity')",
+                },
+                status: {
+                  S: 'PENDING',
+                },
+                timestamp: {
+                  N: '$context.requestTimeEpoch',
                 },
               },
               TableName: table.tableName,
