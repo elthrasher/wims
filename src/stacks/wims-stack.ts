@@ -23,8 +23,10 @@ import { Queue } from 'aws-cdk-lib/aws-sqs';
 import {
   DefinitionBody,
   JsonPath,
+  LogLevel,
   Parallel,
   StateMachine,
+  StateMachineType,
   TaskInput,
 } from 'aws-cdk-lib/aws-stepfunctions';
 import {
@@ -119,7 +121,16 @@ export class WimsStack extends Stack {
 
     const sm = new StateMachine(this, 'OrdersStateMachine', {
       definitionBody: DefinitionBody.fromChainable(parallel),
+      logs: {
+        destination: new LogGroup(this, 'SMLogs', {
+          logGroupName: '/FreeCodeCamp/OrdersSMLogs',
+          retention: RetentionDays.ONE_DAY,
+        }),
+        includeExecutionData: true,
+        level: LogLevel.ALL,
+      },
       stateMachineName: 'orders-state-machine',
+      stateMachineType: StateMachineType.EXPRESS,
       tracingEnabled: true,
     });
 
