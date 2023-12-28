@@ -14,8 +14,7 @@ import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda';
-import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
@@ -39,7 +38,8 @@ import {
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { PROJECT_SOURCE } from '../constants';
+import { PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
+import { ObservabilityConstruct } from '../constructs/observability';
 
 import { TABLE_PK, TABLE_SK } from '../constants';
 
@@ -81,10 +81,10 @@ export class WimsStack extends Stack {
     });
 
     const table = new TableV2(this, 'WIMSTable', {
-      dynamoStream: StreamViewType.NEW_IMAGE,
-      partitionKey: { name: 'pk', type: AttributeType.STRING },
+      dynamoStream: StreamViewType.NEW_AND_OLD_IMAGES,
+      partitionKey: { name: TABLE_PK, type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
-      sortKey: { name: 'sk', type: AttributeType.STRING },
+      sortKey: { name: TABLE_SK, type: AttributeType.STRING },
       tableName: 'WIMS',
     });
 
@@ -109,8 +109,8 @@ export class WimsStack extends Stack {
       },
       conditionExpression: '#quantity >= :quantity',
       key: {
-        pk: DynamoAttributeValue.fromString('INVENTORY#MACGUFFIN'),
-        sk: DynamoAttributeValue.fromString('MODEL#LX'),
+        [TABLE_PK]: DynamoAttributeValue.fromString('INVENTORY#MACGUFFIN'),
+        [TABLE_SK]: DynamoAttributeValue.fromString('MODEL#LX'),
       },
       resultPath: JsonPath.DISCARD,
       table,
@@ -165,23 +165,17 @@ export class WimsStack extends Stack {
     table.grantStreamRead(streamPipeRole);
     paymentsQueue.grantConsumeMessages(paymentsPipeRole);
 
-    const cdcFn = new NodejsFunction(this, 'ChangeDataCapture', {
-      entry: './src/fns/cdc.ts',
-      environment: {
-        TABLE_NAME: table.tableName,
-      },
-      functionName: 'cdc',
-      logRetention: RetentionDays.ONE_WEEK,
-      runtime: Runtime.NODEJS_20_X,
-    });
-    cdcFn.addEventSource(new DynamoEventSource(table, {
-      startingPosition: StartingPosition.LATEST,
-    }));
-    bus.grantPutEventsTo(cdcFn);
-
+    const cdcEvent = 'cdcEvent';
     new Rule(this, 'OrderStateMachineRule', {
       eventBus: bus,
-      eventPattern: { source: [PROJECT_SOURCE] },
+      eventPattern: {
+        source: [PROJECT_SOURCE],
+        detailType: [cdcEvent],
+        detail: {
+          eventType: ['INSERT'],
+          pk: ['CUSTOMER#*'],
+        },
+      },
       ruleName: 'OrdersStateMachine',
       targets: [new SfnStateMachine(sm)],
     });
@@ -205,6 +199,12 @@ export class WimsStack extends Stack {
         },
       },
       target: bus.eventBusArn,
+      targetParameters: {
+        eventBridgeEventBusParameters: {
+          source: PROJECT_SOURCE,
+          detailType: cdcEvent,
+        },
+      },
     });
 
     new CfnPipe(this, 'PaymentsPipe', {
@@ -269,10 +269,10 @@ export class WimsStack extends Stack {
           requestTemplates: {
             'application/json': JSON.stringify({
               Key: {
-                pk: {
+                [TABLE_PK]: {
                   S: 'INVENTORY#MACGUFFIN',
                 },
-                sk: {
+                [TABLE_SK]: {
                   S: 'MODEL#LX',
                 },
               },
@@ -308,10 +308,10 @@ export class WimsStack extends Stack {
           requestTemplates: {
             'application/json': JSON.stringify({
               Item: {
-                pk: {
+                [TABLE_PK]: {
                   S: "CUSTOMER#$input.path('$.customerId')",
                 },
-                sk: {
+                [TABLE_SK]: {
                   S: 'TIMESTAMP#$context.requestTimeEpoch',
                 },
                 customerId: {
@@ -359,5 +359,7 @@ export class WimsStack extends Stack {
         resources: [table.tableArn],
       }),
     });
+
+    new ObservabilityConstruct(this, 'Observability');
   }
 }
