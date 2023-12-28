@@ -5,8 +5,15 @@ import {
   PassthroughBehavior,
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import {
+  AttributeType,
+  BillingMode,
+  StreamViewType,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb';
+import { EventBus } from 'aws-cdk-lib/aws-events';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
 import {
   AwsCustomResource,
   AwsCustomResourcePolicy,
@@ -46,7 +53,29 @@ export class WimsStack extends Stack {
       partitionKey: { name: 'pk', type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
       sortKey: { name: 'sk', type: AttributeType.STRING },
+      stream: StreamViewType.NEW_IMAGE,
       tableName: 'WIMS',
+    });
+
+    const bus = EventBus.fromEventBusName(this, 'DefaultBus', 'default');
+
+    const pipeRole = new Role(this, 'PipeRole', {
+      assumedBy: new ServicePrincipal('pipes.amazonaws.com'),
+    });
+
+    bus.grantPutEventsTo(pipeRole);
+    table.grantStreamRead(pipeRole);
+
+    new CfnPipe(this, 'DDBStreamPipe', {
+      roleArn: pipeRole.roleArn,
+      source: table.tableStreamArn!,
+      sourceParameters: {
+        dynamoDbStreamParameters: { batchSize: 10, startingPosition: 'LATEST' },
+        filterCriteria: {
+          filters: [{ pattern: JSON.stringify({ eventName: ['INSERT'] }) }],
+        },
+      },
+      target: bus.eventBusArn,
     });
 
     const ordersApi = new RestApi(this, 'WIMSOrders', {
