@@ -28,14 +28,14 @@ export class WimsStack extends Stack {
       new MockIntegration({
         integrationResponses: [
           {
+            responseTemplates: {
+              'application/json':
+                '{"message": "Payment Success!", "statusCode": 200 }',
+            },
             statusCode: '200',
           },
         ],
         passthroughBehavior: PassthroughBehavior.NEVER,
-        requestTemplates: {
-          'application/json':
-            '{"message": "Payment Success!", "statusCode": 200 }',
-        },
       }),
       { methodResponses: [{ statusCode: '200' }] }
     );
