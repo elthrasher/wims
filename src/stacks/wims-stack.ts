@@ -36,6 +36,9 @@ export class WimsStack extends Stack {
           },
         ],
         passthroughBehavior: PassthroughBehavior.NEVER,
+        requestTemplates: {
+          'application/json': '{ "statusCode": 200 }',
+        },
       }),
       { methodResponses: [{ statusCode: '200' }] }
     );
