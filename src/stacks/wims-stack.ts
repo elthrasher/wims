@@ -6,7 +6,9 @@ import {
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
+import { EventBus } from 'aws-cdk-lib/aws-events';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
 import {
   AwsCustomResource,
   AwsCustomResourcePolicy,
@@ -58,6 +60,27 @@ export class WimsStack extends Stack {
     });
     const key = paymentsApi.addApiKey('ThrottleKey');
     throttlePlan.addApiKey(key);
+
+    const bus = EventBus.fromEventBusName(this, 'DefaultBus', 'default');
+
+    const pipeRole = new Role(this, 'PipeRole', {
+      assumedBy: new ServicePrincipal('pipes.amazonaws.com'),
+    });
+
+    bus.grantPutEventsTo(pipeRole);
+    table.grantStreamRead(pipeRole);
+
+    new CfnPipe(this, 'DDBStreamPipe', {
+      roleArn: pipeRole.roleArn,
+      source: table.tableStreamArn!,
+      sourceParameters: {
+        dynamoDbStreamParameters: { batchSize: 10, startingPosition: 'LATEST' },
+        filterCriteria: {
+          filters: [{ pattern: JSON.stringify({ eventName: ['INSERT'] }) }],
+        },
+      },
+      target: bus.eventBusArn,
+    });
 
     const ordersApi = new RestApi(this, 'WIMSOrders', {
       deployOptions: { tracingEnabled: true },
