@@ -7,17 +7,16 @@ import {
 } from 'aws-cdk-lib/aws-apigateway';
 import {
   AttributeType,
-  BillingMode,
   StreamViewType,
-  Table,
   TableV2,
 } from 'aws-cdk-lib/aws-dynamodb';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda';
+import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import {
@@ -30,10 +29,8 @@ import {
   TaskInput,
 } from 'aws-cdk-lib/aws-stepfunctions';
 import {
-  CallApiGatewayRestApiEndpoint,
   DynamoAttributeValue,
   DynamoUpdateItem,
-  HttpMethod,
   SqsSendMessage,
 } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import {
@@ -42,6 +39,7 @@ import {
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { PROJECT_SOURCE } from '../constants';
 
 export class WimsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -159,9 +157,23 @@ export class WimsStack extends Stack {
     table.grantStreamRead(streamPipeRole);
     paymentsQueue.grantConsumeMessages(paymentsPipeRole);
 
+    const cdcFn = new NodejsFunction(this, 'ChangeDataCapture', {
+      entry: './src/fns/cdc.ts',
+      environment: {
+        TABLE_NAME: table.tableName,
+      },
+      functionName: 'cdc',
+      logRetention: RetentionDays.ONE_WEEK,
+      runtime: Runtime.NODEJS_20_X,
+    });
+    cdcFn.addEventSource(new DynamoEventSource(table, {
+      startingPosition: StartingPosition.LATEST,
+    }));
+    bus.grantPutEventsTo(cdcFn);
+
     new Rule(this, 'OrderStateMachineRule', {
       eventBus: bus,
-      eventPattern: { source: ['Pipe DDBStreamPipe'] },
+      eventPattern: { source: [PROJECT_SOURCE] },
       ruleName: 'OrdersStateMachine',
       targets: [new SfnStateMachine(sm)],
     });
@@ -206,6 +218,9 @@ export class WimsStack extends Stack {
         Stack.of(this)
       ),
       targetParameters: {
+        eventBridgeEventBusParameters: {
+          source: PROJECT_SOURCE,
+        },
         inputTemplate: `{
           "body": <$.body>
         }`,
