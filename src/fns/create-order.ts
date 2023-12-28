@@ -33,6 +33,7 @@ export const handler = async (
   const createOrderCommand = new PutCommand({
     Item: {
       ...order,
+      status: 'PENDING',
       pk: order.customerId,
       sk: new Date().toISOString(),
     },
