@@ -36,7 +36,8 @@ export class WimsStack extends Stack {
           'application/json':
             '{"message": "Payment Success!", "statusCode": 200 }',
         },
-      })
+      }),
+      { methodResponses: [{ statusCode: '200' }] }
     );
 
     const table = new Table(this, 'WIMSTable', {
