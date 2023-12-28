@@ -1,14 +1,12 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import {
-  LambdaIntegration,
+  AwsIntegration,
   MockIntegration,
   PassthroughBehavior,
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import {
   AwsCustomResource,
   AwsCustomResourcePolicy,
@@ -51,36 +49,102 @@ export class WimsStack extends Stack {
       tableName: 'WIMS',
     });
 
-    const getInventoryFn = new NodejsFunction(this, 'GetInventory', {
-      entry: './src/fns/get-inventory.ts',
-      environment: { TABLE_NAME: table.tableName },
-      functionName: 'get-inventory',
-      logRetention: RetentionDays.ONE_WEEK,
-      runtime: Runtime.NODEJS_20_X,
+    const ordersApi = new RestApi(this, 'WIMSOrders', {
+      deployOptions: { tracingEnabled: true },
     });
-    table.grantReadData(getInventoryFn);
 
-    const createOrderFn = new NodejsFunction(this, 'CreateOrder', {
-      entry: './src/fns/create-order.ts',
-      environment: {
-        API_URL: paymentsApi.deploymentStage.urlForPath('/payments'),
-        TABLE_NAME: table.tableName,
-      },
-      functionName: 'create-order',
-      logRetention: RetentionDays.ONE_WEEK,
-      runtime: Runtime.NODEJS_20_X,
+    const role = new Role(this, 'APIGatewayIntegrationRole', {
+      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
     });
-    table.grantWriteData(createOrderFn);
 
-    const ordersApi = new RestApi(this, 'WIMSOrders');
+    table.grantReadWriteData(role);
 
     // We can get the current MacGuffin inventory with an API call.
     const inventory = ordersApi.root.addResource('inventory');
-    inventory.addMethod('GET', new LambdaIntegration(getInventoryFn));
+    inventory.addMethod(
+      'GET',
+      new AwsIntegration({
+        action: 'GetItem',
+        options: {
+          credentialsRole: role,
+          integrationResponses: [
+            {
+              responseTemplates: {
+                'application/json': `#set($inv = $input.path("$.Item"))
+                {
+                  "model": "$inv.model.S",
+                  "productName": "$inv.productName.S",
+                  "quantity": $inv.quantity.N,
+                }`,
+              },
+              statusCode: '200',
+            },
+          ],
+          requestTemplates: {
+            'application/json': JSON.stringify({
+              Key: {
+                pk: {
+                  S: 'INVENTORY#MACGUFFIN',
+                },
+                sk: {
+                  S: 'MODEL#LX',
+                },
+              },
+              TableName: table.tableName,
+            }),
+          },
+        },
+        service: 'dynamodb',
+      }),
+      {
+        methodResponses: [{ statusCode: '200' }],
+      }
+    );
 
     // We can create a new order with an API call.
     const orders = ordersApi.root.addResource('orders');
-    orders.addMethod('POST', new LambdaIntegration(createOrderFn));
+    orders.addMethod(
+      'POST',
+      new AwsIntegration({
+        action: 'PutItem',
+        options: {
+          credentialsRole: role,
+          integrationResponses: [
+            {
+              responseTemplates: {
+                'application/json': JSON.stringify({
+                  message: 'Order created!',
+                }),
+              },
+              statusCode: '200',
+            },
+          ],
+          requestTemplates: {
+            'application/json': JSON.stringify({
+              Item: {
+                pk: {
+                  S: "$input.path('$.customerId')",
+                },
+                sk: {
+                  S: '$context.requestTimeEpoch',
+                },
+                customerId: {
+                  S: "$input.path('$.customerId')",
+                },
+                quantity: {
+                  N: "$input.path('$.quantity')",
+                },
+              },
+              TableName: table.tableName,
+            }),
+          },
+        },
+        service: 'dynamodb',
+      }),
+      {
+        methodResponses: [{ statusCode: '200' }],
+      }
+    );
 
     // Seeder to add some inventory to our table:
     new AwsCustomResource(this, 'DBSeeder', {
