@@ -29,13 +29,16 @@ export const handler = async (
     throw new Error('Invalid order!');
   }
 
+  const timestamp = new Date().getTime();
+
   // First create the order
   const createOrderCommand = new PutCommand({
     Item: {
       ...order,
       status: 'PENDING',
-      pk: order.customerId,
-      sk: new Date().toISOString(),
+      timestamp,
+      pk: `CUSTOMER#${order.customerId}`,
+      sk: `TIMESTAMP#${timestamp}`,
     },
     TableName: table,
   });
