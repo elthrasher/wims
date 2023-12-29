@@ -196,9 +196,6 @@ export class WimsStack extends Stack {
       source: table.tableStreamArn!,
       sourceParameters: {
         dynamoDbStreamParameters: { batchSize: 10, startingPosition: 'LATEST' },
-        filterCriteria: {
-          filters: [{ pattern: JSON.stringify({ eventName: ['INSERT'] }) }],
-        },
       },
       target: bus.eventBusArn,
       targetParameters: {
@@ -228,9 +225,6 @@ export class WimsStack extends Stack {
         Stack.of(this)
       ),
       targetParameters: {
-        eventBridgeEventBusParameters: {
-          source: PROJECT_SOURCE,
-        },
         inputTemplate: `{
           "body": <$.body>
         }`,
