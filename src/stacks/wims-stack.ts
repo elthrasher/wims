@@ -95,7 +95,7 @@ export class WimsStack extends Stack {
         ':quantity': DynamoAttributeValue.numberFromString(
           JsonPath.format(
             '{}',
-            JsonPath.stringAt('$.detail.dynamodb.NewImage.quantity')
+            JsonPath.stringAt('$.detail.data.NewImage.quantity')
           )
         ),
       },
@@ -110,7 +110,7 @@ export class WimsStack extends Stack {
     });
 
     const enqueuePayment = new SqsSendMessage(this, 'EnqueuePayment', {
-      messageBody: TaskInput.fromJsonPathAt('$.detail.dynamodb.NewImage'),
+      messageBody: TaskInput.fromJsonPathAt('$.detail.data.NewImage'),
       queue: paymentsQueue,
     });
 
@@ -164,8 +164,10 @@ export class WimsStack extends Stack {
         source: [PROJECT_SOURCE],
         detailType: [cdcEvent],
         detail: {
-          eventType: ['INSERT'],
-          pk: [{ prefix: 'CUSTOMER#' }],
+          data: {
+            eventType: ['INSERT'],
+            pk: [{ prefix: 'CUSTOMER#' }],
+          }
         },
       },
       ruleName: 'OrdersStateMachine',
