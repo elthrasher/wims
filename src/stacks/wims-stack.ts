@@ -51,6 +51,13 @@ export class WimsStack extends Stack {
       tableName: 'WIMS',
     });
 
+    const throttlePlan = paymentsApi.addUsagePlan('ThrottlePlan', {
+      name: 'Throttle',
+      throttle: { rateLimit: 5, burstLimit: 1 },
+    });
+    const key = paymentsApi.addApiKey('ThrottleKey');
+    throttlePlan.addApiKey(key);
+
     const getInventoryFn = new NodejsFunction(this, 'GetInventory', {
       entry: './src/fns/get-inventory.ts',
       environment: { TABLE_NAME: table.tableName },
