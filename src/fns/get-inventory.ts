@@ -1,6 +1,7 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { TABLE_PK, TABLE_SK } from '../constants';
 
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
@@ -12,7 +13,7 @@ if (!table) {
 
 export const handler = async (): Promise<APIGatewayProxyResult> => {
   const command = new GetCommand({
-    Key: { pk: 'INVENTORY#MACGUFFIN', sk: 'MODEL#LX' },
+    Key: { [TABLE_PK]: 'INVENTORY#MACGUFFIN', [TABLE_SK]: 'MODEL#LX' },
     TableName: table,
   });
   const result = await client.send(command);
