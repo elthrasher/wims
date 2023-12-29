@@ -12,15 +12,30 @@ export const handler = async (records: DynamoDBRecord[]) => {
     const newImage = r.dynamodb?.NewImage
       ? unmarshall(r.dynamodb?.NewImage as Record<string, AttributeValue>)
       : undefined;
-    const result: { pk: string; sk: string; dynamodb: Record<string, unknown>; eventName?: string; eventType: string; } = {
-      pk: oldImage?.[TABLE_PK] || newImage?.[TABLE_PK] || '',
-      sk: oldImage?.[TABLE_SK] || newImage?.[TABLE_SK] || '',
-      dynamodb: {},
-      eventName: r.eventName,
-      eventType: oldImage && newImage ? 'UPDATE' : oldImage ? 'REMOVE' : 'INSERT',
+    const result: {
+      meta: Record<string, string>;
+      data: {
+        pk: string;
+        sk: string;
+        eventName: string;
+        eventType: string;
+        NewImage?: Record<string, unknown>;
+        OldImage?: Record<string, unknown>;
+      }
+    } = {
+      meta: {
+        fn: process.env.AWS_LAMBDA_FUNCTION_NAME!,
+      },
+      data: {
+        pk: oldImage?.[TABLE_PK] || newImage?.[TABLE_PK] || '',
+        sk: oldImage?.[TABLE_SK] || newImage?.[TABLE_SK] || '',
+        eventName: r.eventName || 'UNKNOWN',
+        eventType:
+          oldImage && newImage ? 'UPDATE' : oldImage ? 'REMOVE' : 'INSERT',
+      },
     };
-    if (newImage) result.dynamodb.NewImage = newImage;
-    if (oldImage) result.dynamodb.OldImage = oldImage;
+    if (newImage) result.data.NewImage = newImage;
+    if (oldImage) result.data.OldImage = oldImage;
     return result;
   });
 };
