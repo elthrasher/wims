@@ -6,6 +6,7 @@ import {
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { TABLE_PK, TABLE_SK } from '../constants';
 
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
@@ -37,8 +38,8 @@ export const handler = async (
       ...order,
       status: 'PENDING',
       timestamp,
-      pk: `CUSTOMER#${order.customerId}`,
-      sk: `TIMESTAMP#${timestamp}`,
+      [TABLE_PK]: `CUSTOMER#${order.customerId}`,
+      [TABLE_SK]: `TIMESTAMP#${timestamp}`,
     },
     TableName: table,
   });
@@ -48,7 +49,7 @@ export const handler = async (
   const updateInventoryCommand = new UpdateCommand({
     ExpressionAttributeNames: { '#quantity': 'quantity' },
     ExpressionAttributeValues: { ':quantity': order.quantity },
-    Key: { pk: 'INVENTORY#MACGUFFIN', sk: 'MODEL#LX' },
+    Key: { [TABLE_PK]: 'INVENTORY#MACGUFFIN', [TABLE_SK]: 'MODEL#LX' },
     TableName: table,
     UpdateExpression: 'set #quantity = #quantity - :quantity',
   });

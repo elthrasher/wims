@@ -5,7 +5,7 @@ import {
   PassthroughBehavior,
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -15,6 +15,7 @@ import {
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { TABLE_PK, TABLE_SK } from '../constants';
 
 export class WimsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -43,11 +44,10 @@ export class WimsStack extends Stack {
       { methodResponses: [{ statusCode: '200' }] }
     );
 
-    const table = new Table(this, 'WIMSTable', {
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      partitionKey: { name: 'pk', type: AttributeType.STRING },
+    const table = new TableV2(this, 'WIMSTable', {
+      partitionKey: { name: TABLE_PK, type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
-      sortKey: { name: 'sk', type: AttributeType.STRING },
+      sortKey: { name: TABLE_SK, type: AttributeType.STRING },
       tableName: 'WIMS',
     });
 
@@ -88,8 +88,8 @@ export class WimsStack extends Stack {
         action: 'putItem',
         parameters: {
           Item: {
-            pk: { S: 'INVENTORY#MACGUFFIN' },
-            sk: { S: 'MODEL#LX' },
+            [TABLE_PK]: { S: 'INVENTORY#MACGUFFIN' },
+            [TABLE_SK]: { S: 'MODEL#LX' },
             model: { S: 'LX' },
             productName: { S: 'MacGuffin' },
             quantity: { N: '1000000' },
