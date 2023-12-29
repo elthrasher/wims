@@ -11,7 +11,7 @@ import {
   TableV2,
 } from 'aws-cdk-lib/aws-dynamodb';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
-import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets';
+import { SfnStateMachine, SnsTopic } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
@@ -40,6 +40,9 @@ import {
 import { Construct } from 'constructs';
 import { PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
 import { ObservabilityConstruct } from '../constructs/observability';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
+import { table } from 'console';
 
 import { TABLE_PK, TABLE_SK } from '../constants';
 
@@ -175,7 +178,7 @@ export class WimsStack extends Stack {
           data: {
             eventType: ['INSERT'],
             pk: [{ prefix: 'CUSTOMER#' }],
-          }
+          },
         },
       },
       ruleName: 'OrdersStateMachine',
@@ -204,6 +207,27 @@ export class WimsStack extends Stack {
           detailType: cdcEvent,
         },
       },
+    });
+
+    const inventoryStockTopic = new Topic(this, 'InventoryStockTopic');
+    inventoryStockTopic.addSubscription(new EmailSubscription('m@martz.codes'));
+
+    new Rule(this, 'InventoryStockRule', {
+      eventBus: bus,
+      eventPattern: {
+        source: [PROJECT_SOURCE],
+        detailType: [cdcEvent],
+        detail: {
+          data: {
+            eventType: ['UPDATE'],
+            pk: [{ prefix: 'INVENTORY#' }],
+            NewImage: {
+              quantity: [{ numeric: ['<=', 100] }],
+            },
+          },
+        },
+      },
+      targets: [new SnsTopic(inventoryStockTopic)],
     });
 
     new CfnPipe(this, 'PaymentsPipe', {
