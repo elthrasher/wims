@@ -131,7 +131,8 @@ export class WimsStack extends Stack {
       definitionBody: DefinitionBody.fromChainable(parallel),
       logs: {
         destination: new LogGroup(this, 'SMLogs', {
-          logGroupName: '/FreeCodeCamp/OrdersSMLogs',
+          logGroupName: '/aws/vendedlogs/states/OrdersSMLogs',
+          removalPolicy: RemovalPolicy.DESTROY,
           retention: RetentionDays.ONE_DAY,
         }),
         includeExecutionData: true,
@@ -149,7 +150,8 @@ export class WimsStack extends Stack {
     });
 
     const streamPipeLogs = new LogGroup(this, 'StreamPipeLogs', {
-      logGroupName: '/FreeCodeCamp/streamPipeLogs',
+      logGroupName: '/aws/vendedlogs/pipes/streamPipeLogs',
+      removalPolicy: RemovalPolicy.DESTROY,
       retention: RetentionDays.ONE_DAY,
     });
 
@@ -158,7 +160,8 @@ export class WimsStack extends Stack {
     });
 
     const paymentsPipeLogs = new LogGroup(this, 'PaymentsPipeLogs', {
-      logGroupName: '/FreeCodeCamp/paymentsPipeLogs',
+      logGroupName: '/aws/vendedlogs/pipes/paymentsPipeLogs',
+      removalPolicy: RemovalPolicy.DESTROY,
       retention: RetentionDays.ONE_DAY,
     });
 
