@@ -13,10 +13,12 @@ import {
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SfnStateMachine, SnsTopic } from 'aws-cdk-lib/aws-events-targets';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import {
   DefinitionBody,
@@ -38,12 +40,9 @@ import {
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+
 import { PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
 import { ObservabilityConstruct } from '../constructs/observability';
-import { Topic } from 'aws-cdk-lib/aws-sns';
-import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-
-import { TABLE_PK, TABLE_SK } from '../constants';
 
 export class WimsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
