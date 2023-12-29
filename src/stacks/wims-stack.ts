@@ -17,6 +17,8 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import {
   DefinitionBody,
@@ -41,8 +43,6 @@ import { Construct } from 'constructs';
 
 import { PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
 import { ObservabilityConstruct } from '../constructs/observability';
-import { Topic } from 'aws-cdk-lib/aws-sns';
-import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 
 export class WimsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
