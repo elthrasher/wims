@@ -42,7 +42,6 @@ import { PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
 import { ObservabilityConstruct } from '../constructs/observability';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { EmailSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import { table } from 'console';
 
 import { TABLE_PK, TABLE_SK } from '../constants';
 
