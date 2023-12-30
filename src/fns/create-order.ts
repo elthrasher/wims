@@ -56,10 +56,21 @@ export const handler = async (
   await client.send(updateInventoryCommand);
 
   // Now process payment
-  await fetch(api, { body: order, method: 'POST' });
+  const result = await fetch(api, {
+    body: JSON.stringify(order),
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+  });
 
-  return {
-    body: 'Order created!',
-    statusCode: 200,
-  };
+  if (result.ok) {
+    return {
+      body: 'Order created!',
+      statusCode: 200,
+    };
+  } else {
+    return {
+      body: 'An error has occurred!',
+      statusCode: result.status,
+    };
+  }
 };

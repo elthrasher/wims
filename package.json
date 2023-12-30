@@ -6,7 +6,7 @@
   },
   "scripts": {
     "clean": "rimraf cdk.out",
-    "deploy": "cdk deploy",
+    "deploy": "cdk deploy --outputs-file config.json",
     "predeploy": "npm run clean",
     "watch": "cdk watch --hotswap-fallback"
   },

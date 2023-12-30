@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import {
   LambdaIntegration,
   MockIntegration,
@@ -22,7 +22,9 @@ export class WimsStack extends Stack {
     super(scope, id, props);
 
     // Payments is an external system so mocked here.
-    const paymentsApi = new RestApi(this, 'WIMSPayments');
+    const paymentsApi = new RestApi(this, 'WIMSPayments', {
+      deployOptions: { throttlingBurstLimit: 5, throttlingRateLimit: 5 },
+    });
     const payments = paymentsApi.root.addResource('payments');
     payments.addMethod(
       'POST',
@@ -50,13 +52,6 @@ export class WimsStack extends Stack {
       sortKey: { name: TABLE_SK, type: AttributeType.STRING },
       tableName: 'WIMS',
     });
-
-    const throttlePlan = paymentsApi.addUsagePlan('ThrottlePlan', {
-      name: 'Throttle',
-      throttle: { rateLimit: 5, burstLimit: 1 },
-    });
-    const key = paymentsApi.addApiKey('ThrottleKey');
-    throttlePlan.addApiKey(key);
 
     const getInventoryFn = new NodejsFunction(this, 'GetInventory', {
       entry: './src/fns/get-inventory.ts',
@@ -109,6 +104,10 @@ export class WimsStack extends Stack {
       policy: AwsCustomResourcePolicy.fromSdkCalls({
         resources: [table.tableArn],
       }),
+    });
+
+    new CfnOutput(this, 'OrdersUrl', {
+      value: ordersApi.deploymentStage.urlForPath('/orders'),
     });
   }
 }
