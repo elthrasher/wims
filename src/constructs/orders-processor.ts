@@ -22,13 +22,13 @@ import { Construct } from 'constructs';
 
 import { CDC_EVENT, PROJECT_SOURCE, TABLE_PK, TABLE_SK } from '../constants';
 
-interface OrderProcessorProps {
+interface OrdersProcessorProps {
   queue: Queue;
   table: TableV2;
 }
 
-export class OrderProcessor extends Construct {
-  constructor(scope: Construct, id: string, props: OrderProcessorProps) {
+export class OrdersProcessor extends Construct {
+  constructor(scope: Construct, id: string, props: OrdersProcessorProps) {
     super(scope, id);
 
     const { queue, table } = props;

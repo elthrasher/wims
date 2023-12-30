@@ -10,8 +10,8 @@ import { TABLE_PK, TABLE_SK } from '../constants';
 import { CDC } from '../constructs/cdc';
 import { InventoryMonitor } from '../constructs/inventory-monitor';
 import { ObservabilityConstruct } from '../constructs/observability';
-import { OrderProcessor } from '../constructs/order-processor';
 import { OrdersApi } from '../constructs/orders-api';
+import { OrdersProcessor } from '../constructs/orders-processor';
 import { PaymentsApi } from '../constructs/payments-api';
 import { PaymentsProcessor } from '../constructs/payments-processor';
 
@@ -35,7 +35,7 @@ export class WimsStack extends Stack {
       api: paymentsApi.getApi(),
     });
     const ordersApi = new OrdersApi(this, 'OrdersApi', { table });
-    new OrderProcessor(this, 'OrderProcessor', {
+    new OrdersProcessor(this, 'OrdersProcessor', {
       queue: paymentsProcessor.getQueue(),
       table,
     });
