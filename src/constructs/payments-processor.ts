@@ -27,7 +27,10 @@ export class PaymentsProcessor extends Construct {
       retention: RetentionDays.ONE_DAY,
     });
 
+    const dlq = new Queue(this, 'PaymentsDlq', { queueName: 'payments-dlq' });
+
     this.paymentsQueue = new Queue(this, 'PaymentsQueue', {
+      deadLetterQueue: { maxReceiveCount: 10, queue: dlq },
       queueName: 'payments-queue',
     });
     this.paymentsQueue.grantConsumeMessages(paymentsPipeRole);

@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import {
   AttributeType,
   StreamViewType,
@@ -34,10 +34,17 @@ export class WimsStack extends Stack {
     const paymentsProcessor = new PaymentsProcessor(this, 'PaymentsProcessor', {
       api: paymentsApi.getApi(),
     });
-    new OrdersApi(this, 'OrdersApi', { table });
+    const ordersApi = new OrdersApi(this, 'OrdersApi', { table });
     new OrderProcessor(this, 'OrderProcessor', {
       queue: paymentsProcessor.getQueue(),
       table,
+    });
+
+    new CfnOutput(this, 'InventoryUrl', {
+      value: ordersApi.getApi().deploymentStage.urlForPath('/inventory'),
+    });
+    new CfnOutput(this, 'OrdersUrl', {
+      value: ordersApi.getApi().deploymentStage.urlForPath('/orders'),
     });
   }
 }

@@ -12,7 +12,9 @@ export class PaymentsApi extends Construct {
     super(scope, id);
 
     // Payments is an external system so mocked here.
-    this.api = new RestApi(this, 'WIMSPayments');
+    this.api = new RestApi(this, 'WIMSPayments', {
+      deployOptions: { throttlingBurstLimit: 5, throttlingRateLimit: 5 },
+    });
     const payments = this.api.root.addResource('payments');
     payments.addMethod(
       'POST',
@@ -33,13 +35,6 @@ export class PaymentsApi extends Construct {
       }),
       { methodResponses: [{ statusCode: '200' }] }
     );
-
-    const throttlePlan = this.api.addUsagePlan('ThrottlePlan', {
-      name: 'Throttle',
-      throttle: { rateLimit: 5, burstLimit: 1 },
-    });
-    const key = this.api.addApiKey('ThrottleKey');
-    throttlePlan.addApiKey(key);
   }
 
   getApi() {

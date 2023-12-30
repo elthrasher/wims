@@ -14,12 +14,13 @@ export interface OrdersApiProps {
 }
 
 export class OrdersApi extends Construct {
+  private api: RestApi;
   constructor(scope: Construct, id: string, props: OrdersApiProps) {
     super(scope, id);
 
     const { table } = props;
 
-    const ordersApi = new RestApi(this, 'WIMSOrders', {
+    this.api = new RestApi(this, 'WIMSOrders', {
       deployOptions: { tracingEnabled: true },
     });
 
@@ -30,7 +31,7 @@ export class OrdersApi extends Construct {
     table.grantReadWriteData(role);
 
     // We can get the current MacGuffin inventory with an API call.
-    const inventory = ordersApi.root.addResource('inventory');
+    const inventory = this.api.root.addResource('inventory');
     inventory.addMethod(
       'GET',
       new AwsIntegration({
@@ -44,7 +45,7 @@ export class OrdersApi extends Construct {
                 {
                   "model": "$inv.model.S",
                   "productName": "$inv.productName.S",
-                  "quantity": $inv.quantity.N,
+                  "quantity": $inv.quantity.N
                 }`,
               },
               statusCode: '200',
@@ -72,7 +73,7 @@ export class OrdersApi extends Construct {
     );
 
     // We can create a new order with an API call.
-    const orders = ordersApi.root.addResource('orders');
+    const orders = this.api.root.addResource('orders');
     orders.addMethod(
       'POST',
       new AwsIntegration({
@@ -143,5 +144,9 @@ export class OrdersApi extends Construct {
         resources: [table.tableArn],
       }),
     });
+  }
+
+  getApi() {
+    return this.api;
   }
 }
