@@ -6,13 +6,13 @@ import { CfnPipe } from 'aws-cdk-lib/aws-pipes';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
 
-interface PaymentsProcessorProps {
+interface PaymentsQueueProps {
   api: RestApi;
 }
 
-export class PaymentsProcessor extends Construct {
+export class PaymentsQueue extends Construct {
   private paymentsQueue: Queue;
-  constructor(scope: Construct, id: string, props: PaymentsProcessorProps) {
+  constructor(scope: Construct, id: string, props: PaymentsQueueProps) {
     super(scope, id);
 
     const { api } = props;

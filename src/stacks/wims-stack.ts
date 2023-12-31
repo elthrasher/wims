@@ -13,7 +13,7 @@ import { ObservabilityConstruct } from '../constructs/observability';
 import { OrdersApi } from '../constructs/orders-api';
 import { OrdersProcessor } from '../constructs/orders-processor';
 import { PaymentsApi } from '../constructs/payments-api';
-import { PaymentsProcessor } from '../constructs/payments-processor';
+import { PaymentsQueue } from '../constructs/payments-queue';
 
 export class WimsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -31,12 +31,12 @@ export class WimsStack extends Stack {
     new InventoryMonitor(this, 'InventoryMonitor');
     new ObservabilityConstruct(this, 'Observability');
     const paymentsApi = new PaymentsApi(this, 'PaymentsApi');
-    const paymentsProcessor = new PaymentsProcessor(this, 'PaymentsProcessor', {
+    const paymentsQueue = new PaymentsQueue(this, 'PaymentsQueue', {
       api: paymentsApi.getApi(),
     });
     const ordersApi = new OrdersApi(this, 'OrdersApi', { table });
     new OrdersProcessor(this, 'OrdersProcessor', {
-      queue: paymentsProcessor.getQueue(),
+      queue: paymentsQueue.getQueue(),
       table,
     });
 
