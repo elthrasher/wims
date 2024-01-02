@@ -1,0 +1,1851 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Entire Stack > match a snapshot 1`] = `
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com",
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com",
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com",
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com",
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com",
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com",
+      },
+      "ap-south-2": {
+        "states": "states.ap-south-2.amazonaws.com",
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com",
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com",
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com",
+      },
+      "ap-southeast-4": {
+        "states": "states.ap-southeast-4.amazonaws.com",
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com",
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com",
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com",
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com",
+      },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com",
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com",
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com",
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com",
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com",
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com",
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com",
+      },
+      "il-central-1": {
+        "states": "states.il-central-1.amazonaws.com",
+      },
+      "me-central-1": {
+        "states": "states.me-central-1.amazonaws.com",
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com",
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com",
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com",
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com",
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com",
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com",
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com",
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com",
+      },
+    },
+  },
+  "Outputs": {
+    "InventoryUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "OrdersApiWIMSOrdersF7690A27",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "OrdersApiWIMSOrdersDeploymentStageprod741B2431",
+            },
+            "/inventory",
+          ],
+        ],
+      },
+    },
+    "OrdersApiWIMSOrdersEndpointE944B6A3": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "OrdersApiWIMSOrdersF7690A27",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "OrdersApiWIMSOrdersDeploymentStageprod741B2431",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "OrdersUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "OrdersApiWIMSOrdersF7690A27",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "OrdersApiWIMSOrdersDeploymentStageprod741B2431",
+            },
+            "/orders",
+          ],
+        ],
+      },
+    },
+    "PaymentsApiWIMSPaymentsEndpoint468382D9": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "PaymentsApiWIMSPaymentsDeploymentStageprod3C4C973C",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": {
+        "Code": {"S3Bucket":{"Fn::Sub":"cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}"},"S3Key":"[HASH REMOVED].zip"},
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CDCCDCEnrichment867F8CCE": {
+      "DependsOn": [
+        "CDCCDCEnrichmentServiceRoleFCC4ACE8",
+      ],
+      "Properties": {
+        "Code": {"S3Bucket":{"Fn::Sub":"cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}"},"S3Key":"[HASH REMOVED].zip"},
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "FunctionName": "cdc-enrichment",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CDCCDCEnrichmentServiceRoleFCC4ACE8",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CDCCDCEnrichmentLogRetention1C3206A8": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "CDCCDCEnrichment867F8CCE",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 7,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "CDCCDCEnrichmentServiceRoleFCC4ACE8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CDCCDCPipeLogs22B23415": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/vendedlogs/pipes/cdcPipeLogs",
+        "RetentionInDays": 1,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "CDCCDCPipeRoleD3DBB3FD": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "pipes.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CDCCDCPipeRoleDefaultPolicyE4014483": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":events:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":event-bus/default",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "CDCCDCEnrichment867F8CCE",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "CDCCDCEnrichment867F8CCE",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "dynamodb:ListStreams",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WIMSTableF1144CC6",
+                  "StreamArn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WIMSTableF1144CC6",
+                  "StreamArn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CDCCDCPipeRoleDefaultPolicyE4014483",
+        "Roles": [
+          {
+            "Ref": "CDCCDCPipeRoleD3DBB3FD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CDCCDCStreamPipeBE3816CA": {
+      "Properties": {
+        "Enrichment": {
+          "Fn::GetAtt": [
+            "CDCCDCEnrichment867F8CCE",
+            "Arn",
+          ],
+        },
+        "LogConfiguration": {
+          "CloudwatchLogsLogDestination": {
+            "LogGroupArn": {
+              "Fn::GetAtt": [
+                "CDCCDCPipeLogs22B23415",
+                "Arn",
+              ],
+            },
+          },
+          "IncludeExecutionData": [
+            "ALL",
+          ],
+          "Level": "INFO",
+        },
+        "Name": "CDCStreamPipe",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "CDCCDCPipeRoleD3DBB3FD",
+            "Arn",
+          ],
+        },
+        "Source": {
+          "Fn::GetAtt": [
+            "WIMSTableF1144CC6",
+            "StreamArn",
+          ],
+        },
+        "SourceParameters": {
+          "DynamoDBStreamParameters": {
+            "BatchSize": 10,
+            "StartingPosition": "LATEST",
+          },
+        },
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":events:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":event-bus/default",
+            ],
+          ],
+        },
+        "TargetParameters": {
+          "EventBridgeEventBusParameters": {
+            "DetailType": "cdcEvent",
+            "Source": "freeCodeCamp",
+          },
+        },
+      },
+      "Type": "AWS::Pipes::Pipe",
+    },
+    "EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CCustomResourcePolicy39BF5D21": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "logs:PutResourcePolicy",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "logs:DeleteResourcePolicy",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CCustomResourcePolicy39BF5D21",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CED3FF4DA": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CCustomResourcePolicy39BF5D21",
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"CloudWatchLogs","action":"putResourcePolicy","parameters":{"policyName":"teststackEventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CE927012A","policyDocument":"{\\"Statement\\":[{\\"Action\\":[\\"logs:PutLogEvents\\",\\"logs:CreateLogStream\\"],\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"events.amazonaws.com\\"},\\"Resource\\":\\"",
+              {
+                "Fn::GetAtt": [
+                  "ObservabilityobserverLogs7B5F11B9",
+                  "Arn",
+                ],
+              },
+              "\\"}],\\"Version\\":\\"2012-10-17\\"}"},"physicalResourceId":{"id":"EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008C"}}",
+            ],
+          ],
+        },
+        "Delete": "{"service":"CloudWatchLogs","action":"deleteResourcePolicy","parameters":{"policyName":"teststackEventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CE927012A"},"ignoreErrorCodesMatching":"ResourceNotFoundException"}",
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{"service":"CloudWatchLogs","action":"putResourcePolicy","parameters":{"policyName":"teststackEventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008CE927012A","policyDocument":"{\\"Statement\\":[{\\"Action\\":[\\"logs:PutLogEvents\\",\\"logs:CreateLogStream\\"],\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"events.amazonaws.com\\"},\\"Resource\\":\\"",
+              {
+                "Fn::GetAtt": [
+                  "ObservabilityobserverLogs7B5F11B9",
+                  "Arn",
+                ],
+              },
+              "\\"}],\\"Version\\":\\"2012-10-17\\"}"},"physicalResourceId":{"id":"EventsLogGroupPolicyteststackObservabilityobserverRuleF6BC008C"}}",
+            ],
+          ],
+        },
+      },
+      "Type": "Custom::CloudwatchLogResourcePolicy",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InventoryMonitorInventoryStockRuleBC42EB37": {
+      "Properties": {
+        "EventBusName": "default",
+        "EventPattern": {
+          "detail": {
+            "data": {
+              "NewImage": {
+                "quantity": [
+                  {
+                    "numeric": [
+                      "<=",
+                      100,
+                    ],
+                  },
+                ],
+              },
+              "eventType": [
+                "UPDATE",
+              ],
+              "pk": [
+                {
+                  "prefix": "INVENTORY#",
+                },
+              ],
+            },
+          },
+          "detail-type": [
+            "cdcEvent",
+          ],
+          "source": [
+            "freeCodeCamp",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "InventoryMonitorInventoryStockTopicF344308A",
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "InventoryMonitorInventoryStockTopicF344308A": {
+      "Type": "AWS::SNS::Topic",
+    },
+    "InventoryMonitorInventoryStockTopicPolicy8E0EF028": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+              "Resource": {
+                "Ref": "InventoryMonitorInventoryStockTopicF344308A",
+              },
+              "Sid": "0",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Topics": [
+          {
+            "Ref": "InventoryMonitorInventoryStockTopicF344308A",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::TopicPolicy",
+    },
+    "InventoryMonitorInventoryStockTopicmmartzcodes159C1A97": {
+      "Properties": {
+        "Endpoint": "m@martz.codes",
+        "Protocol": "email",
+        "TopicArn": {
+          "Ref": "InventoryMonitorInventoryStockTopicF344308A",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {"S3Bucket":{"Fn::Sub":"cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}"},"S3Key":"[HASH REMOVED].zip"},
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ObservabilityDiscoverer8C6EB44C": {
+      "Properties": {
+        "CrossAccount": false,
+        "Description": "freeCodeCamp EDA Discoverer",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":events:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":event-bus/default",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::EventSchemas::Discoverer",
+    },
+    "ObservabilitybusfreeCodeCampArchive7E50DD86": {
+      "Properties": {
+        "ArchiveName": "freeCodeCampArchive",
+        "Description": "freeCodeCampArchive",
+        "EventPattern": {
+          "source": [
+            "freeCodeCamp",
+          ],
+        },
+        "RetentionDays": 1,
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":events:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":event-bus/default",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Events::Archive",
+    },
+    "ObservabilityobserverLogs7B5F11B9": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/vendedlogs/observer/event-logs",
+        "RetentionInDays": 1,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ObservabilityobserverRuleE85E7FEF": {
+      "Properties": {
+        "EventPattern": {
+          "source": [
+            "freeCodeCamp",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":logs:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":log-group:",
+                  {
+                    "Ref": "ObservabilityobserverLogs7B5F11B9",
+                  },
+                ],
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "OrdersApiAPIGatewayIntegrationRole5DEC989B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "OrdersApiAPIGatewayIntegrationRoleDefaultPolicy76C81BEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WIMSTableF1144CC6",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "OrdersApiAPIGatewayIntegrationRoleDefaultPolicy76C81BEB",
+        "Roles": [
+          {
+            "Ref": "OrdersApiAPIGatewayIntegrationRole5DEC989B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "OrdersApiDBSeeder4ECF89A7": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "OrdersApiDBSeederCustomResourcePolicyE6A68ABD",
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{"action":"putItem","parameters":{"Item":{"pk":{"S":"INVENTORY#MACGUFFIN"},"sk":{"S":"MODEL#LX"},"model":{"S":"LX"},"productName":{"S":"MacGuffin"},"quantity":{"N":"1000000"}},"TableName":"",
+              {
+                "Ref": "WIMSTableF1144CC6",
+              },
+              ""},"physicalResourceId":{"responsePath":""},"service":"DynamoDB"}",
+            ],
+          ],
+        },
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "OrdersApiDBSeederCustomResourcePolicyE6A68ABD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:PutItem",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WIMSTableF1144CC6",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "OrdersApiDBSeederCustomResourcePolicyE6A68ABD",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "OrdersApiWIMSOrdersAccount525D91B6": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "OrdersApiWIMSOrdersF7690A27",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "OrdersApiWIMSOrdersCloudWatchRole45F539D6",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OrdersApiWIMSOrdersCloudWatchRole45F539D6": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OrdersApiWIMSOrdersDeploymentFD529ADF1013e6b907d7b1f68a6e63fb60d8b2bc": {
+      "DependsOn": [
+        "OrdersApiWIMSOrdersinventoryGET1C02351E",
+        "OrdersApiWIMSOrdersinventoryA37E63ED",
+        "OrdersApiWIMSOrdersordersPOST0DCD7BE2",
+        "OrdersApiWIMSOrdersorders613D4F0D",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "OrdersApiWIMSOrdersDeploymentStageprod741B2431": {
+      "DependsOn": [
+        "OrdersApiWIMSOrdersAccount525D91B6",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "OrdersApiWIMSOrdersDeploymentFD529ADF1013e6b907d7b1f68a6e63fb60d8b2bc",
+        },
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+        "StageName": "prod",
+        "TracingEnabled": true,
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "OrdersApiWIMSOrdersF7690A27": {
+      "Properties": {
+        "Name": "WIMSOrders",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "OrdersApiWIMSOrdersinventoryA37E63ED": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "OrdersApiWIMSOrdersF7690A27",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "inventory",
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "OrdersApiWIMSOrdersinventoryGET1C02351E": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "OrdersApiAPIGatewayIntegrationRole5DEC989B",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseTemplates": {
+                "application/json": "#set($inv = $input.path("$.Item"))
+                {
+                  "model": "$inv.model.S",
+                  "productName": "$inv.productName.S",
+                  "quantity": $inv.quantity.N
+                }",
+              },
+              "StatusCode": "200",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "{"Key":{"pk":{"S":"INVENTORY#MACGUFFIN"},"sk":{"S":"MODEL#LX"}},"TableName":"",
+                  {
+                    "Ref": "WIMSTableF1144CC6",
+                  },
+                  ""}",
+                ],
+              ],
+            },
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":dynamodb:action/GetItem",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "OrdersApiWIMSOrdersinventoryA37E63ED",
+        },
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "OrdersApiWIMSOrdersorders613D4F0D": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "OrdersApiWIMSOrdersF7690A27",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "orders",
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "OrdersApiWIMSOrdersordersPOST0DCD7BE2": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "Credentials": {
+            "Fn::GetAtt": [
+              "OrdersApiAPIGatewayIntegrationRole5DEC989B",
+              "Arn",
+            ],
+          },
+          "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseTemplates": {
+                "application/json": "{"message":"Order created!"}",
+              },
+              "StatusCode": "200",
+            },
+          ],
+          "RequestTemplates": {
+            "application/json": {
+              "Fn::Join": [
+                "",
+                [
+                  "{"Item":{"pk":{"S":"CUSTOMER#$input.path('$.customerId')"},"sk":{"S":"TIMESTAMP#$context.requestTimeEpoch"},"customerId":{"S":"$input.path('$.customerId')"},"quantity":{"N":"$input.path('$.quantity')"},"status":{"S":"PENDING"},"timestamp":{"N":"$context.requestTimeEpoch"}},"TableName":"",
+                  {
+                    "Ref": "WIMSTableF1144CC6",
+                  },
+                  ""}",
+                ],
+              ],
+            },
+          },
+          "Type": "AWS",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":dynamodb:action/PutItem",
+              ],
+            ],
+          },
+        },
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "OrdersApiWIMSOrdersorders613D4F0D",
+        },
+        "RestApiId": {
+          "Ref": "OrdersApiWIMSOrdersF7690A27",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "OrdersProcessorOrderStateMachineRuleB2CB4F90": {
+      "Properties": {
+        "EventBusName": "default",
+        "EventPattern": {
+          "detail": {
+            "data": {
+              "eventType": [
+                "INSERT",
+              ],
+              "pk": [
+                {
+                  "prefix": "CUSTOMER#",
+                },
+              ],
+            },
+          },
+          "detail-type": [
+            "cdcEvent",
+          ],
+          "source": [
+            "freeCodeCamp",
+          ],
+        },
+        "Name": "OrdersStateMachine",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "OrdersProcessorOrdersStateMachine52A3DECC",
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "OrdersProcessorOrdersStateMachineEventsRole25B54028",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "OrdersProcessorOrdersStateMachine52A3DECC": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "OrdersProcessorOrdersStateMachineRoleDefaultPolicy19B7E74F",
+        "OrdersProcessorOrdersStateMachineRole8F54C05D",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"Parallel Steps","States":{"Parallel Steps":{"Type":"Parallel","End":true,"Branches":[{"StartAt":"AdjustInventory","States":{"AdjustInventory":{"End":true,"Type":"Task","ResultPath":null,"Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::dynamodb:updateItem","Parameters":{"Key":{"pk":{"S":"INVENTORY#MACGUFFIN"},"sk":{"S":"MODEL#LX"}},"TableName":"",
+              {
+                "Ref": "WIMSTableF1144CC6",
+              },
+              "","ConditionExpression":"#quantity >= :quantity","ExpressionAttributeNames":{"#quantity":"quantity"},"ExpressionAttributeValues":{":quantity":{"N.$":"States.Format('{}', $.detail.data.NewImage.quantity)"}},"UpdateExpression":"set #quantity = #quantity - :quantity"}}}},{"StartAt":"EnqueuePayment","States":{"EnqueuePayment":{"End":true,"Type":"Task","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::sqs:sendMessage","Parameters":{"QueueUrl":"",
+              {
+                "Ref": "PaymentsQueueB3ACC458",
+              },
+              "","MessageBody.$":"$.detail.data.NewImage"}}}}]}}}",
+            ],
+          ],
+        },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "OrdersProcessorSMLogsE84E2F25",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": true,
+          "Level": "ALL",
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "OrdersProcessorOrdersStateMachineRole8F54C05D",
+            "Arn",
+          ],
+        },
+        "StateMachineName": "orders-state-machine",
+        "StateMachineType": "EXPRESS",
+        "TracingConfiguration": {
+          "Enabled": true,
+        },
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "OrdersProcessorOrdersStateMachineEventsRole25B54028": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "OrdersProcessorOrdersStateMachineEventsRoleDefaultPolicy88922610": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "OrdersProcessorOrdersStateMachine52A3DECC",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "OrdersProcessorOrdersStateMachineEventsRoleDefaultPolicy88922610",
+        "Roles": [
+          {
+            "Ref": "OrdersProcessorOrdersStateMachineEventsRole25B54028",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "OrdersProcessorOrdersStateMachineRole8F54C05D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "OrdersProcessorOrdersStateMachineRoleDefaultPolicy19B7E74F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+                "xray:GetSamplingRules",
+                "xray:GetSamplingTargets",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "dynamodb:UpdateItem",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":dynamodb:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":table/",
+                    {
+                      "Ref": "WIMSTableF1144CC6",
+                    },
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "sqs:SendMessage",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "PaymentsQueueB3ACC458",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "OrdersProcessorOrdersStateMachineRoleDefaultPolicy19B7E74F",
+        "Roles": [
+          {
+            "Ref": "OrdersProcessorOrdersStateMachineRole8F54C05D",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "OrdersProcessorSMLogsE84E2F25": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/vendedlogs/states/OrdersSMLogs",
+        "RetentionInDays": 1,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "PaymentsApiWIMSPayments5D1A82D9": {
+      "Properties": {
+        "Name": "WIMSPayments",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "PaymentsApiWIMSPaymentsAccount091ECF1E": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "PaymentsApiWIMSPayments5D1A82D9",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "PaymentsApiWIMSPaymentsCloudWatchRole1C348E2C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PaymentsApiWIMSPaymentsCloudWatchRole1C348E2C": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "PaymentsApiWIMSPaymentsDeployment47D207F421e21108f8856656e110b033ae6d2d51": {
+      "DependsOn": [
+        "PaymentsApiWIMSPaymentspaymentsPOST5291E3BF",
+        "PaymentsApiWIMSPaymentspayments2DCCEE7D",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "PaymentsApiWIMSPaymentsDeploymentStageprod3C4C973C": {
+      "DependsOn": [
+        "PaymentsApiWIMSPaymentsAccount091ECF1E",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "PaymentsApiWIMSPaymentsDeployment47D207F421e21108f8856656e110b033ae6d2d51",
+        },
+        "MethodSettings": [
+          {
+            "DataTraceEnabled": false,
+            "HttpMethod": "*",
+            "ResourcePath": "/*",
+            "ThrottlingBurstLimit": 5,
+            "ThrottlingRateLimit": 5,
+          },
+        ],
+        "RestApiId": {
+          "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+        },
+        "StageName": "prod",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "PaymentsApiWIMSPaymentspayments2DCCEE7D": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "PaymentsApiWIMSPayments5D1A82D9",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "payments",
+        "RestApiId": {
+          "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "PaymentsApiWIMSPaymentspaymentsPOST5291E3BF": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseTemplates": {
+                "application/json": "{"message": "Payment Success!", "statusCode": 200 }",
+              },
+              "StatusCode": "200",
+            },
+          ],
+          "PassthroughBehavior": "NEVER",
+          "RequestTemplates": {
+            "application/json": "{ "statusCode": 200 }",
+          },
+          "Type": "MOCK",
+        },
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+          },
+        ],
+        "ResourceId": {
+          "Ref": "PaymentsApiWIMSPaymentspayments2DCCEE7D",
+        },
+        "RestApiId": {
+          "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "PaymentsQueueB3ACC458": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "payments-queue",
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "PaymentsQueuePaymentsDlqBB9F6AE4",
+              "Arn",
+            ],
+          },
+          "maxReceiveCount": 10,
+        },
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "PaymentsQueuePaymentsDlqBB9F6AE4": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "payments-dlq",
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "PaymentsQueuePaymentsPipeD460D0FB": {
+      "Properties": {
+        "LogConfiguration": {
+          "CloudwatchLogsLogDestination": {
+            "LogGroupArn": {
+              "Fn::GetAtt": [
+                "PaymentsQueuePaymentsPipeLogs061CCFE2",
+                "Arn",
+              ],
+            },
+          },
+          "IncludeExecutionData": [
+            "ALL",
+          ],
+          "Level": "INFO",
+        },
+        "Name": "PaymentsPipe",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "PaymentsQueuePaymentsPipeRole87627E0D",
+            "Arn",
+          ],
+        },
+        "Source": {
+          "Fn::GetAtt": [
+            "PaymentsQueueB3ACC458",
+            "Arn",
+          ],
+        },
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "PaymentsApiWIMSPayments5D1A82D9",
+              },
+              "/prod/POST/payments",
+            ],
+          ],
+        },
+        "TargetParameters": {
+          "InputTemplate": "{
+          "body": <$.body>
+        }",
+        },
+      },
+      "Type": "AWS::Pipes::Pipe",
+    },
+    "PaymentsQueuePaymentsPipeLogs061CCFE2": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/vendedlogs/pipes/paymentsPipeLogs",
+        "RetentionInDays": 1,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "PaymentsQueuePaymentsPipeRole87627E0D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "pipes.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PaymentsQueuePaymentsPipeRoleDefaultPolicy7B59B224": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "PaymentsQueueB3ACC458",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PaymentsQueuePaymentsPipeRoleDefaultPolicy7B59B224",
+        "Roles": [
+          {
+            "Ref": "PaymentsQueuePaymentsPipeRole87627E0D",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "WIMSTableF1144CC6": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "pk",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "sk",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "pk",
+            "KeyType": "HASH",
+          },
+          {
+            "AttributeName": "sk",
+            "KeyType": "RANGE",
+          },
+        ],
+        "Replicas": [
+          {
+            "Region": {
+              "Ref": "AWS::Region",
+            },
+          },
+        ],
+        "StreamSpecification": {
+          "StreamViewType": "NEW_AND_OLD_IMAGES",
+        },
+        "TableName": "WIMS",
+      },
+      "Type": "AWS::DynamoDB::GlobalTable",
+      "UpdateReplacePolicy": "Delete",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

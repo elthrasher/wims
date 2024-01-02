@@ -21,14 +21,14 @@ export const handler = async (records: DynamoDBRecord[]) => {
         eventType: string;
         NewImage?: Record<string, unknown>;
         OldImage?: Record<string, unknown>;
-      }
+      };
     } = {
       meta: {
         fn: process.env.AWS_LAMBDA_FUNCTION_NAME!,
       },
       data: {
-        pk: oldImage?.[TABLE_PK] || newImage?.[TABLE_PK] || '',
-        sk: oldImage?.[TABLE_SK] || newImage?.[TABLE_SK] || '',
+        pk: oldImage?.[TABLE_PK] || newImage?.[TABLE_PK],
+        sk: oldImage?.[TABLE_SK] || newImage?.[TABLE_SK],
         eventName: r.eventName || 'UNKNOWN',
         eventType:
           oldImage && newImage ? 'UPDATE' : oldImage ? 'REMOVE' : 'INSERT',

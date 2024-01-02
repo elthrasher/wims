@@ -7,26 +7,36 @@
   "scripts": {
     "clean": "rimraf cdk.out",
     "deploy": "cdk deploy --outputs-file config.json",
+    "lint": "eslint . --fix",
+    "loc": "cloc stacks src --exclude-ext=spec.ts || echo \"You need to install cloc.\"",
     "predeploy": "npm run clean",
+    "pretest": "npm run lint",
+    "test": "vitest run --coverage --pool forks --silent",
     "watch": "cdk watch --hotswap-fallback"
   },
   "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
     "@types/aws-lambda": "^8.10.130",
-    "@types/jest": "^29.5.11",
-    "@types/node": "20.10.4",
-    "aws-cdk": "2.116.1",
-    "esbuild": "^0.19.10",
-    "jest": "^29.7.0",
+    "@types/node": "20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "@vitest/coverage-v8": "^1.1.1",
+    "aws-cdk": "2.117.0",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "prettier": "^3.1.1",
     "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "vitest": "^1.1.1"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.481.0",
-    "@aws-sdk/lib-dynamodb": "^3.481.0",
-    "aws-cdk-lib": "2.116.1",
-    "constructs": "^10.0.0",
+    "@aws-sdk/client-dynamodb": "^3.484.0",
+    "@aws-sdk/lib-dynamodb": "^3.484.0",
+    "aws-cdk-lib": "2.117.0",
+    "constructs": "^10.3.0",
     "source-map-support": "^0.5.21"
   }
 }

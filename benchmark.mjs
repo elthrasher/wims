@@ -39,7 +39,7 @@ console.timeEnd(TIMER_LABEL);
 console.log(responses);
 setTimeout(async () => {
   const finalInventory = (await (await fetch(InventoryUrl)).json()).quantity;
-  console.log(`Inventory after 1s: ${finalInventory}`);
+  console.log(`Inventory after 500ms: ${finalInventory}`);
   console.log(`Inventory reduced by: ${startInventory - finalInventory} of sales total ${totalSales}.`);
-  console.log('Waited 1 second.');
-}, 1000);
+  console.log('Waited 500 ms.');
+}, 500);
